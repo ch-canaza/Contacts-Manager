@@ -1,0 +1,7 @@
+<% if user_signed_in? %>
+  <%= link_to "sign out", destroy_user_session_path, method: :delete, class: "nav-link"%>
+<% else %>
+  <%= link_to "sign in", new_user_session_path, class: "nav-link"%>       
+<% end %>
+
+<h1> hello i am index</h1>
