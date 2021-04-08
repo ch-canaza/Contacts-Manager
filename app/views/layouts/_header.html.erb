@@ -18,17 +18,8 @@
           <li class="nav-item">
             <%= link_to "sign out", destroy_user_session_path, method: :delete, class: "nav-link"%>       
           </li>
-          <li class="nav-item">
-            <div class="btn btn-info">
-              <%= link_to "Tweet", new_tweet_path, class: "nav-link "%>       
-            </div>
-          </li>
-          <li class="nav-item">
-            <div>
-              My Profile: 
-              <%= link_to current_user.user_name, show_user_path(current_user), class:"nav-link fst-italic" %>      
-            </div>
-          </li>
+          
+          
         <% else %>
           <li class="nav-item">
             <%= link_to "sign up", new_user_registration_path, class: "nav-link"%>       
