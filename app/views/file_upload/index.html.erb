@@ -1,0 +1,54 @@
+ <%= form_with do |form| %>
+  <h1> hi i am show </h1>
+  <p><%= @options %></p>
+  <p><%= @csv %></p>
+  
+
+  <div class="field form-label">
+      <%= form_tag file_upload_index_path, multipart: true do %>
+        <div>
+          <%= form.file_field :csv_file %>
+          <%= button_tag file_upload_index_path, method: :get %>
+        </div>
+        <br>
+        <h4>your file id:<%= @file.id %>
+        <h3> Match your file columns</h3>
+        <div>
+          <%= form.label :full_name %>
+          <%= form.select :full_name, @file.previewer, 
+                                  class:"form-control form-control-lg" %>
+        </div>
+        <div>
+          <%= form.label :date_of_birth %>
+          <%= form.select :date_of_birth, @file.previewer, 
+                                  class:"form-control form-control-lg" %>
+        </div>
+        <div>
+          <%= form.label :phone_number %>
+          <%= form.select :phone_number, @file.previewer, 
+                                  class:"form-control form-control-lg" %>
+        </div>
+        <div>
+          <%= form.label :address %>
+          <%= form.select :address, @file.previewer, 
+                                  class:"form-control form-control-lg" %>
+        </div>
+        <div>
+          <%= form.label :credit_card %>
+          <%= form.select :credit_card, @file.previewer, 
+                                  class:"form-control form-control-lg" %>
+        </div>
+        <div>
+          <%= form.label :franchise %>
+          <%= form.select :franchise, @file.previewer, 
+                                  class:"form-control form-control-lg" %>
+        </div>
+        <div>
+          <%= form.label :email %>
+          <%= form.select :email, @file.previewer, 
+                                  class:"form-control form-control-lg" %>
+        </div>
+      <% end %>
+      
+  </div>
+<%end%>
