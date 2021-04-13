@@ -1,0 +1,33 @@
+<h1>Contact</h1>
+<div>
+  <p>
+    <b>
+      Nombres: 
+    </b> 
+    <%= @contact.full_name %>
+  </p>
+  <p>
+    <b>
+      Apellidos: 
+    </b> 
+    <%= @contact.address %>
+  </p>
+  <p>
+    <b>
+      Email: 
+    </b> 
+    <%= @contact.email %>
+  </p>
+  
+      Cargo: 
+    </b> 
+    <%= @contact.credit_card %>
+  </p>
+  <p>
+    <b>
+      Departamento: 
+    </b> 
+    <%= @contact.phone_number %>
+  </p>
+</div>
+<%= link_to 'Back', new_contact_path, class:"btn btn-danger" %>

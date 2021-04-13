@@ -1,78 +1,30 @@
-<%= form_with do |form| %>
-  <% @contacts.each do |contact| %>
-    <% if contact.errors.any? %>
-      <div id="error_explanation">
-        <h2>
-          <%= pluralize(contact.errors.count, "error") %> 
-            prohibited this employee from being saved:
-        </h2>
+<!--%= render './contacts/upload'%-->
+<%= render './contacts/my_contacts' %>
+</div class="container" >
 
-        <ul>
-          <% contact.errors.each do |error| %>
-            <li>
-              <%= error.full_message %>
-            </li>
-          <% end %>
-        </ul>
-      </div>
-    <% end %>
-  <% end %>
-  <h1> hi i am index create contact </h1>
-  
-  <div class="field form-label">
-    <%= form_tag file_upload_index_path, multipart: true do %>
-      <div>
-        <%= form.file_field :csv_file %>
-        <%= form.submit %>
-      </div>
-      <br>
-     <h4>your file id:<%= @csv_file.id %>
-    
-    
-      <h3> Match your file columns</h3>
-        
-        <div>
-         <%=$csv_preview%>
-         <br>
-        </div>
-        <div>
-          <%= form.label :full_name %>
-          <%= form.select :full_name, $csv_preview, 
-                                  class:"form-control form-control-lg" %>
-        </div>
-        <div>
-          <%= form.label :date_of_birth %>
-          <%= form.select :date_of_birth, $csv_preview, 
-                                  class:"form-control form-control-lg" %>
-        </div>
-        <div>
-          <%= form.label :phone_number %>
-          <%= form.select :phone_number, $csv_preview, 
-                                  class:"form-control form-control-lg" %>
-        </div>
-        <div>
-          <%= form.label :address %>
-          <%= form.select :address, $csv_preview, 
-                                  class:"form-control form-control-lg" %>
-        </div>
-        <div>
-          <%= form.label :credit_card %>
-          <%= form.select :credit_card, $csv_preview, 
-                                  class:"form-control form-control-lg" %>
-        </div>
-        <div>
-          <%= form.label :franchise %>
-          <%= form.select :franchise, $csv_preview, 
-                                  class:"form-control form-control-lg" %>
-        </div>
-        <div>
-          <%= form.label :email %>
-          <%= form.select :email, $csv_preview, 
-                                  class:"form-control form-control-lg" %>
-        </div>
-        </div>
+  <div class="panel panel-default">
+    <div class="panel-heading">
+      <h3 class="panel-title"> Select CSV File</h3>
+    </div>
+    <div class="panel-body">
+      <div class="row" id="upload_area">
+        <form method="post" id="upload_form" enctype="multipart/form-data">
+          <div class="col-md-6" text-align="right"> Select File</div>
+          <div class="col-md-6">
+            <input type="file" name="file" id="csv_file"/>
+          </div>
+          <br />
+          <br />
+          <br />
+          <div class="col-md-12" text-align="center">
+            <input type="submit" name="upload_file" id="upload_file" class="btn btn-primary" value="Upload"/>
+          </div>
+        </form>
+        <div class="table-responsive" class="process_area">
 
-    <% end %>
-      
+        </div>
+      </div>
+    </div>
   </div>
-<%end%>
+</div>
+

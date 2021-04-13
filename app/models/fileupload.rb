@@ -1,16 +1,12 @@
 class Fileupload < ApplicationRecord
-  has_one_attached :csv_file
+  has_one_attached :file
 
   def previewer
-    # self.csv_file.open do |file|
-    #   CSV.foreach(file) do |row|
-    #     puts row.data
-    #   end
-    # end
-    $csv_preview = csv_file.open(&:first).parse_csv
-    puts '--- previewer---'
-    puts $csv_preview
-    puts '--- pre ---'
-    #$data = @data1
+    if csv_file
+      $csv_preview = csv_file.open(&:first).parse_csv
+      $myfile = csv_file
+    else
+      $csv_preview = %w[first second third fourth fifth sixth seventh]
+    end
   end
 end

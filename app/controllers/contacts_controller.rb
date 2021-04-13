@@ -1,41 +1,48 @@
 class ContactsController < ApplicationController
-  before_action :set_file, only: %i[index create]
-  before_action :set_data, only: %i[index create]
+  before_action :set_file, only: %i[index new]
+  before_action :set_data, only: %i[index new ]
+  before_action :set_contact, only: %i[index]
   #require 'csv'
   #require 'open-uri'
 
-  def index
-    
+  def new
+    @contact = Contact.new
     @contacts = Contact.all
-    #@options = %w[papa yuca platano]
-    #@csv = @csv_file.previewer
-    #puts @file
-    #@csv = CSV.parse(File.read("/home/chris/Downloads/employees (5).csv"), headers: true)
-    #@csv = CSV.parse(File.read(file_data.to_s), headers: true)
-    #@csv = @csv[0]
+  end
+
+  def show
+  end
+
+  def index
+    @contacts = Contact.all
+    respond_to do |format|
+      format.html
+      format.csv { send_data @contacts.to_csv }
+    end
   end
 
   def create
-    @csv_file.previewer
+    @contact = Contact.new(contact_params)
+    respond_to do |format|
+      if @contact.save
+        format.html { redirect_to contacts_path, notice: 'contact was succesfuly created.' }
+      else
+        format.html { render :new, status: :unprocessable_entity }
+      end
+    end
+  end
 
-    puts '------ create ----'
-    
-    puts '----------** -----' 
-    puts @csv_file
-    puts '---------'
-    redirect_to contacts_path
-    #   @contact = Contact.new(contact_params)
-    #   respond_to do |format|
-    #   if @contact.save
-    #     format.html { redirect_to @contact, notice: 'Contact was successfully created.' }
-    #   else
-    #     format.html { redirect_to contacts_path, notice: 'Contact was not saved' }
-    #   end
-    # end
-
-    # else
-    #   redirect_to root_path
-    # end
+  def import
+    if Contact.import(params[:csv_file])
+      redirect_to contacts_path, notice: 'data was just imported!'
+    else
+      redirect_to new_contact_path, alert: 'Sorry, No file chosen, Action can not be performed'
+    end
+  rescue ActiveRecord::RecordInvalid => e
+    redirect_to new_contact_path, alert: "#{e.message}, it seems your file has duplicated records"
+  rescue ActiveModel::UnknownAttributeError => e
+    redirect_to new_contact_path, alert: "#{e.message}, it seems your file has invalid records"
+  
   end
 
   private
@@ -53,9 +60,14 @@ class ContactsController < ApplicationController
     puts' ---*** ---'
   end
 
+  def set_contact
+    #@file = Fileupload.find_by(params[:id])
+    @contact = Contact.find_by(params[:id])
+  end
+
   def set_data
-   #@file = Fileupload.find_by(params[:id])
-   @data1 = @csv_file.csv_file.download
+   
+   #@data1 = @csv_file.csv_file.download
    puts '---data---'
    puts @data1
    puts '---***---'
