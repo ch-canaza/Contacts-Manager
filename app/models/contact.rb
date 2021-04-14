@@ -1,4 +1,5 @@
 class Contact < ApplicationRecord
+   
   VALID_PHONE_NUMBER = /\A[0-9]+\Z/
   VALID_EMAIL_REGEX = /\A[\w+\-.]+@[a-z\d\-]+(\.[a-z\d\-]+)*\.[a-z]+\z/i
   VALID_NAME_REGEX = /\A[a-zA-Z -]+\z/
@@ -7,6 +8,16 @@ class Contact < ApplicationRecord
   VALID_PHONE_NUMBER_REGEX_1 = /\A\(\+\d{2}\) \d{3} \d{3} \d{2} \d{2}\z/
   #VALID_PHONE_NUMBER_REGEX_2 = /\A\(\+\d{2}\) \d{3}-\d{3}-\d{2}-\d{2}\z/
 
+  VALID_VISA_IIN = /\A^4[0-9]{6,}$\Z/
+  VALID_AMERICAN_EXPRESS_IIN = /\A^3[47][0-9]{5,}$\Z/
+  VALID_DINNERS_CLUB_IIN = /\A^3(?:0[0-5]|[68][0-9])[0-9]{4,}$\Z/
+  VALID_DISCOVER_IIN = /\A^6(?:011|5[0-9]{2})[0-9]{3,}$\Z/
+  VALID_MASTER_CARD_INN = /\A^5[1-5][0-9]{7}\Z/
+  
+  validate :correct_phone_format
+  validate :correct_date_of_birth_format
+  validate :a_valid_franchise?
+  
   validates :full_name, 
             presence: true,
             format: {with: VALID_NAME_REGEX },
@@ -16,6 +27,7 @@ class Contact < ApplicationRecord
             format: { with: VALID_DATE_OF_BIRTH_REGEX_1 }
   validates :phone_number, 
             presence: true,
+            uniqueness: { message: "%{value} cause error"},
             format: { with: VALID_PHONE_NUMBER_REGEX_1 }
   validates :address, 
             presence: true,
@@ -35,9 +47,16 @@ class Contact < ApplicationRecord
      
   has_one_attached :csv_file
 
-  #validate :correct_phone_format
-  #validate :correct_date_of_birth_format
+  
 
+  # def card_number
+  #   @card_number ||= Password.new(card_number_hash) if card_number_hash.present?
+  # end
+
+  # def card_number=(new_card_number)
+  #   @card_number = new_card_number
+  #   self.card_number_hash = new_card_number
+  # end
 
   def self.import(file)
     if file
@@ -65,12 +84,12 @@ class Contact < ApplicationRecord
     if VALID_DATE_OF_BIRTH_REGEX_1.match(date_of_birth) ||
        VALID_DATE_OF_BIRTH_REGEX_2.match(date_of_birth)
       begin
-        birthdate.to_date
+        date_of_birth.to_date
       rescue => e
-        errors.add(:birthdate, "wrong date value")
+        errors.add(:date_of_birth, "wrong date value")
       end
     else
-      errors.add(:birthdate, "wrong date format")
+      errors.add(:date_of_birth, "wrong date format")
     end
   end
 
@@ -80,5 +99,24 @@ class Contact < ApplicationRecord
       errors.add(:phone, "wrong phone format")
     end
   end
+
+  def correct_card_franchise_based_on_iin_format
+    return 'visa' if VALID_VISA_IIN.match(credit_card)
+    return 'dinners club' if VALID_DINNERS_CLUB_IIN.match(credit_card)
+    return 'master card' if VALID_MASTER_CARD_INN.match(credit_card)
+    return 'american express' if VALID_AMERICAN_EXPRESS_IIN.match(credit_card)
+    return 'discover' if VALID_DISCOVER_IIN.match(credit_card)
+
+    nil
+  end
+
+  private
+
+  def a_valid_franchise?
+    if correct_card_franchise_based_on_iin_format.nil?
+      errors.add(:credit_card, :invalid)
+      false
+    end
+  end
+
 end
-  

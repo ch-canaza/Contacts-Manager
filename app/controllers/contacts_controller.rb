@@ -1,20 +1,24 @@
 class ContactsController < ApplicationController
+  before_action :set_page, only: %i[show]
   before_action :set_file, only: %i[index new]
   before_action :set_data, only: %i[index new ]
   before_action :set_contact, only: %i[index]
-  #require 'csv'
-  #require 'open-uri'
-
+  
+  CONTACTS_PER_PAGE = 3
+  
   def new
     @contact = Contact.new
     @contacts = Contact.all
   end
 
   def show
+    @contacts = Contact.all
+    #@contacts = Contact.paginate(page: params[:page])
+    @contacts_page = current_user.contacts.offset(@page * CONTACTS_PER_PAGE).limit(CONTACTS_PER_PAGE).order(created_at: :desc)
   end
 
   def index
-    @contacts = Contact.all
+    
     respond_to do |format|
       format.html
       format.csv { send_data @contacts.to_csv }
@@ -34,7 +38,7 @@ class ContactsController < ApplicationController
 
   def import
     if Contact.import(params[:csv_file])
-      redirect_to contacts_path, notice: 'data was just imported!'
+      redirect_to contacts_path, notice: "data was just imported!, valid #{$franchise} card"
     else
       redirect_to new_contact_path, alert: 'Sorry, No file chosen, Action can not be performed'
     end
@@ -46,6 +50,10 @@ class ContactsController < ApplicationController
   end
 
   private
+
+  def set_page
+    @page = params.fetch(:page, 0).to_i
+  end 
 
   def file_params
     @data = params.permit(:csv_file)
