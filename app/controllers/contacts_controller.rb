@@ -1,4 +1,5 @@
 class ContactsController < ApplicationController
+  before_action :authenticate_user!
   before_action :set_page, only: %i[show]
   before_action :set_file, only: %i[index new]
   before_action :set_data, only: %i[index new ]
@@ -7,17 +8,17 @@ class ContactsController < ApplicationController
   CONTACTS_PER_PAGE = 3
   
   def new
-    @contact = Contact.new
+    @user_contact = current_user.contacts.build
     @contacts = Contact.all
   end
 
   def show
     @contacts = Contact.all
-    #@contacts = Contact.paginate(page: params[:page])
-    @contacts_page = current_user.contacts.offset(@page * CONTACTS_PER_PAGE).limit(CONTACTS_PER_PAGE).order(created_at: :desc)
+    @contacts = Contact.order(created_at: :desc).paginate(page: params[:page], per_page: 10)
   end
 
   def index
+    @contacts = Contact.all
     
     respond_to do |format|
       format.html
@@ -37,19 +38,26 @@ class ContactsController < ApplicationController
   end
 
   def import
-    if Contact.import(params[:csv_file])
-      redirect_to contacts_path, notice: "data was just imported!, valid #{$franchise} card"
+    user = current_user
+    if Contact.import(params[:csv_file], user)
+      if $success
+        redirect_to contacts_path, notice: "data was just imported to (#{$data_location}!), valid (#{$franchise}) card"
+      else
+        redirect_to failcontacts_path, notice: "failed data was just imported to (#{$data_location}!), valid (#{$franchise}) card"
+      end
     else
       redirect_to new_contact_path, alert: 'Sorry, No file chosen, Action can not be performed'
     end
   rescue ActiveRecord::RecordInvalid => e
-    redirect_to new_contact_path, alert: "#{e.message}, it seems your file has duplicated records"
+    redirect_to failcontacts_path, alert: "#{e.message}, it seems your file has duplicated records"
+    Failcontact.import_fail(params[:csv_file], user)
   rescue ActiveModel::UnknownAttributeError => e
     redirect_to new_contact_path, alert: "#{e.message}, it seems your file has invalid records"
   
   end
 
   private
+
 
   def set_page
     @page = params.fetch(:page, 0).to_i
@@ -70,7 +78,7 @@ class ContactsController < ApplicationController
 
   def set_contact
     #@file = Fileupload.find_by(params[:id])
-    @contact = Contact.find_by(params[:id])
+    @contact = current_user.contacts.find_by(params[:id])
   end
 
   def set_data
@@ -88,7 +96,8 @@ class ContactsController < ApplicationController
       :phone_number,
       :address,
       :credit_card,
-      :email
+      :email,
+      :user_id
     )
   end
 end

@@ -4,7 +4,8 @@ class User < ApplicationRecord
   devise :database_authenticatable, :registerable,
          :recoverable, :rememberable, :validatable
   
-  has_many :contacts
-  #has_many :file_uploads through: :file_upload
+  has_many :contacts, dependent: :destroy
+  has_many :fileuploads, dependent: :destroy
+  has_many :failcontacts, dependent: :destroy
 
 end

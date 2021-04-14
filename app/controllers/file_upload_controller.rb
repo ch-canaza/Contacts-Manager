@@ -1,7 +1,7 @@
 class FileUploadController < ApplicationController
   #before_action :set_file, only: %i[index create]
   before_action :set_data, only: %i[index create]
- 
+  before_action :authenticate_user!
 
   def index
     @file = Fileupload.find_by(params[:id])
@@ -11,12 +11,6 @@ class FileUploadController < ApplicationController
   def show
     @file = Fileupload.find_by(params[id])
   end
-
-  # def create
-  #   #@csv_file.previewer
-  #   redirect_to root_path
-   
-  # end
 
   private
 
