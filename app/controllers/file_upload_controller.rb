@@ -1,5 +1,4 @@
 class FileUploadController < ApplicationController
-  #before_action :set_file, only: %i[index create]
   before_action :set_data, only: %i[index create]
   before_action :authenticate_user!
 
@@ -22,22 +21,16 @@ class FileUploadController < ApplicationController
         redirect_to new_fileupload_path
       end
     end
-    #@file = Fileupload.find_by(params[:id])
-    #@files = Fileupload.all
   end
 
-  def show
-   
-  end
+  def show; end
 
-  def create
-  end
+  def create; end
 
   private
 
   def file_params
     @data = params.permit(:csv_file)
-    #params.require(:fileupload).permit(:csv_file)
   end
 
   def set_file
@@ -48,6 +41,5 @@ class FileUploadController < ApplicationController
     if @csv_file
       @csv_file.csv_file.download
     end
-    #puts @data
   end
 end

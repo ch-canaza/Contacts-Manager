@@ -17,40 +17,38 @@ class Contact < ApplicationRecord
   VALID_DINNERS_CLUB_IIN = /\A^3(?:0[0-5]|[68][0-9])[0-9]{4,}$\Z/
   VALID_DISCOVER_IIN = /\A^6(?:011|5[0-9]{2})[0-9]{3,}$\Z/
   VALID_MASTER_CARD_INN = /\A^5[1-5][0-9]{7}\Z/
-  
+
   validate :correct_phone_format
   #validate :correct_date_of_birth_format
   validate :a_valid_franchise?
-  
-  validates :full_name, 
+
+  validates :full_name,
             presence: true,
             format: {with: VALID_NAME_REGEX },
             length: { maximum: 75 }
   validates :date_of_birth,
             presence: true,
             format: { with: VALID_DATE_OF_BIRTH_REGEX_1 }
-  validates :phone_number, 
+  validates :phone_number,
             presence: true
-            #uniqueness: { message: "%{value} cause error"}
-  validates :address, 
+  validates :address,
             presence: true,
             length: { maximum: 25 }
-  validates :credit_card, 
+  validates :credit_card,
             presence: true,
             length: { maximum: 15 }
-  validates :franchise, 
+  validates :franchise,
             presence: true,
             length: { maximum: 25 }
-  validates :email, 
+  validates :email,
             presence: true,
-            uniqueness: { scope: :credit_card, message: 'already exists in the database'},
+            uniqueness: { scope: :credit_card, message: 'already exists in the database' },
             length: { minimum: 3, maximum: 35 },
             format: { with: VALID_EMAIL_REGEX }
 
-     
   has_one_attached :csv_file
 
-
+  
   def card_number
     @card_number ||= Password.new(card_number_hash) if card_number_hash.present?
   end
@@ -100,7 +98,7 @@ class Contact < ApplicationRecord
       begin
         date_of_birth.to_date
       rescue
-        errors.add(:date_of_birth, "wrong date value")
+        errors.add(:date_of_birth, "rong date value")
       end
     else
       errors.add(:date_of_birth, "wrong date format")
