@@ -19,6 +19,7 @@ class ContactsController < ApplicationController
 
   def index
     @contacts = Contact.all
+    @contacts = Contact.order(created_at: :desc).paginate(page: params[:page], per_page: 10)
     
     respond_to do |format|
       format.html

@@ -62,7 +62,7 @@ class Contact < ApplicationRecord
 
   def self.import(file, user)
     if user
-      
+
       $success = false
       CSV.foreach(file, headers: true) do |row|
         puts row.headers

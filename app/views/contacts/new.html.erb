@@ -1,45 +1,15 @@
 <div class="field form-label">
   <%= form_tag import_contacts_path, multipart: true do %>
     <div>
-      <%= file_field_tag :csv_file %>
-      <%= submit_tag "import"%>
+      <%= file_field_tag :csv_file, class:"btn btn-outline-danger" %>
+      <%= submit_tag "import", class:"btn btn-outline-primary"%>
     </div>
     <br>
   <% end %>
 </div>  
 
-<div id="message"></div>
-<div class="panel panel-default">
-  <div class="panel-heading">
-    <h3 class="panel-title"> Select CSV File</h3>
-  </div>
-  <div class="panel-body">
-    <div class="row" id="upload_area">
+<h1 class="panel-title"> Select CSV File</h1>
 
-      <!--form method="post" id="upload_form" enctype="multipart/form-data"-->
-      <%= form_with model: @contact , method: :post, remote: true, html: { id: "upload_form" } do |f| %>
-
-        <div class="col-md-6" align="right"> Select File</div>
-        <div class="col-md-6">
-          <!--input type="file" name="file" id="csv_file"/-->
-          <%= f.file_field :csv_file%>
-        </div>
-        <br />
-        <br />
-        <br />
-        <div class="col-md-12" align="center">
-          <!--input type="submit" name="upload_file" id="upload_file" class="btn btn-primary" value="Upload"/-->
-          <%= f.submit "upload", class:"btn btn-primary"%>
-        </div>
-      <% end %>
-
-      <!--/form-->
-      <div class="table-responsive" class="process_area">
-
-      </div>
-    </div>
-  </div>
-</div>
 
 
   

@@ -5,14 +5,6 @@
   <h3> Download data from Data Base</h3>
   <%= link_to 'download', failcontacts_path + '.csv', class:"btn btn-outline-secondary" %>
   <br>
-  <h3> Import data from your pc</h3>
-    <%= form_tag import_contacts_path, multipart: true do %>
-      
-      <%= file_field_tag :file %>
-      <%= submit_tag 'import CSV' %>
-    <% end %>
-</div>
-<br>
 
 <br>
 <% @failed_contacts.each do |contact| %>
