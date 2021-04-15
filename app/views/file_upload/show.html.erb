@@ -1,0 +1,58 @@
+<%= form_with do |form| %>
+  <% @contacts.each do |contact| %>
+    <% if contact.errors.any? %>
+      <div id="error_explanation">
+        <h2>
+          <%= pluralize(contact.errors.count, "error") %> 
+            prohibited this employee from being saved:
+        </h2>
+
+        <ul>
+          <% contact.errors.each do |error| %>
+            <li>
+              <%= error.full_message %>
+            </li>
+          <% end %>
+        </ul>
+      </div>
+    <% end %>
+  <% end %>
+  <h1> hi i am new fileupload </h1>
+
+  <div>
+    <%= form.label :full_name %>
+    <%= form.select :full_name, @headers, 
+                            class:"form-control form-control-lg" %>
+  </div>
+  <div>
+    <%= form.label :date_of_birth %>
+    <%= form.select :date_of_birth, @headers, 
+                            class:"form-control form-control-lg" %>
+  </div>
+  <div>
+    <%= form.label :phone_number %>
+    <%= form.select :phone_number, @headers, 
+                            class:"form-control form-control-lg" %>
+  </div>
+  <div>
+    <%= form.label :address %>
+    <%= form.select :address, @headers, 
+                            class:"form-control form-control-lg" %>
+  </div>
+  <div>
+    <%= form.label :credit_card %>
+    <%= form.select :credit_card, @headers, 
+                            class:"form-control form-control-lg" %>
+  </div>
+  <div>
+    <%= form.label :franchise %>
+    <%= form.select :franchise, @headers, 
+                            class:"form-control form-control-lg" %>
+  </div>
+  <div>
+    <%= form.label :email %>
+    <%= form.select :email, @headers, 
+                            class:"form-control form-control-lg" %>
+  </div>
+ 
+<%end%>

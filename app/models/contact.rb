@@ -66,7 +66,7 @@ class Contact < ApplicationRecord
       $success = false
       CSV.foreach(file, headers: true) do |row|
         puts row.headers
-        puts row.to_hash
+        puts row
         $headers = row.headers
         if user.contacts.create! row.to_hash
           $success = true

@@ -5,7 +5,6 @@ class ContactsController < ApplicationController
   before_action :set_data, only: %i[index new ]
   before_action :set_contact, only: %i[index]
   
-  CONTACTS_PER_PAGE = 3
   
   def new
     @user_contact = current_user.contacts.build
@@ -40,8 +39,9 @@ class ContactsController < ApplicationController
 
   def import
     user = current_user
-    #if ContactsWorker.perform_async(params[:csv_file].path, user)
-    if Contact.import(params[:csv_file], user)
+    if params[:csv_file]
+      #ContactsWorker.perform_async(params[:csv_file].path, user)
+      Contact.import(params[:csv_file], user)
       # job_id = ContactsWorker.perform_async(params[:csv_file], user)
       # puts params[:csv_file]
       # @status = Sidekiq::Stats.new
@@ -53,7 +53,7 @@ class ContactsController < ApplicationController
       # puts 'retrying' if Sidekiq::Status::retrying? job_id
       # puts 'failed' if Sidekiq::Status::failed? job_id
       # puts 'interrupted' if Sidekiq::Status::interrupted? job_id
-      
+
       puts "complete -- none"
       
 

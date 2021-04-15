@@ -3,13 +3,34 @@ class FileUploadController < ApplicationController
   before_action :set_data, only: %i[index create]
   before_action :authenticate_user!
 
+  def new
+    @contacts = Contact.all
+    if params[:csv_file]
+      CSV.foreach(params[:csv_file], headers: true) do |row|
+        @headers = row.headers
+        flash[:notice] = 'now match columns'
+        redirect_to fileupload_index_path
+      end
+    end
+  end
+
   def index
-    @file = Fileupload.find_by(params[:id])
-    @files = Fileupload.all
+    @contacts = Contact.all
+    if params[:csv_file]
+      CSV.foreach(params[:csv_file], headers: true) do |row|
+        @headers = row.headers
+        redirect_to new_fileupload_path
+      end
+    end
+    #@file = Fileupload.find_by(params[:id])
+    #@files = Fileupload.all
   end
 
   def show
-    @file = Fileupload.find_by(params[id])
+   
+  end
+
+  def create
   end
 
   private

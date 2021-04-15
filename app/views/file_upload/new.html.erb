@@ -1,0 +1,7 @@
+<%= form_for :fileupload, url: file_upload_index_path do |form| %>
+  <h1> hi i am show </h1>
+  <div>
+    <%= file_field_tag :csv_file, class:"btn btn-outline-danger" %>
+    <%= submit_tag "import", class:"btn btn-outline-primary"%>
+  </div>
+  <%end%>
