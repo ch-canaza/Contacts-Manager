@@ -39,7 +39,23 @@ class ContactsController < ApplicationController
 
   def import
     user = current_user
+    #if ContactsWorker.perform_async(params[:csv_file].path, user)
     if Contact.import(params[:csv_file], user)
+      # job_id = ContactsWorker.perform_async(params[:csv_file], user)
+      # puts params[:csv_file]
+      # @status = Sidekiq::Stats.new
+
+      # puts "status:#{@status.processed}"
+      # puts 'complete' if Sidekiq::Status::complete? job_id
+      # puts 'queued' if Sidekiq::Status::queued? job_id
+      # puts 'working' if Sidekiq::Status::working? job_id
+      # puts 'retrying' if Sidekiq::Status::retrying? job_id
+      # puts 'failed' if Sidekiq::Status::failed? job_id
+      # puts 'interrupted' if Sidekiq::Status::interrupted? job_id
+      
+      puts "complete -- none"
+      
+
       if $success
         redirect_to contacts_path, notice: "data was just imported to (#{$data_location}!), valid (#{$franchise}) card"
       else

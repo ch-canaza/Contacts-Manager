@@ -13,7 +13,7 @@ class FailcontactsController < ApplicationController
   def set_failed_contact
     @failed_contact = current_user.failcontacts.find(params[:id])
   rescue ActiveRecord::RecordNotFound
-    flash[:alert] = "You can only view your own failed contacts"
+    flash[:alert] = "You are allowed to view your own failed contacts files"
     redirect_to failcontacts_path
   end
 

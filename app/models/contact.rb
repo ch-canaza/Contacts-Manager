@@ -1,5 +1,6 @@
 class Contact < ApplicationRecord
   include BCrypt
+  include Sidekiq::Worker
   
   belongs_to :user
 
@@ -61,9 +62,11 @@ class Contact < ApplicationRecord
 
   def self.import(file, user)
     if user
+      
       $success = false
-      CSV.foreach(file.path, headers: true) do |row|
+      CSV.foreach(file, headers: true) do |row|
         puts row.headers
+        puts row.to_hash
         $headers = row.headers
         if user.contacts.create! row.to_hash
           $success = true
