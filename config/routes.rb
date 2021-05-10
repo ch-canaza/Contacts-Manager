@@ -8,7 +8,9 @@ Rails.application.routes.draw do
   devise_for :users 
   resources :file_upload
   resources :contacts do
-    collection { post :import }
+    collection {  post :import }
+    collection {  get :import }
+    
   end 
   resources :failcontacts, only: %i[index show]
 

@@ -1,5 +1,6 @@
 <div class="field form-label">
-  <%= form_tag import_contacts_path, multipart: true do %>
+  <!--%= form_tag import_contacts_path, multipart: true do %-->
+  <%= form_tag contacts_path, multipart: true do %>
     <div>
       <%= file_field_tag :csv_file, class:"btn btn-outline-danger" %>
       <%= submit_tag "import", class:"btn btn-outline-primary"%>
@@ -8,10 +9,8 @@
   <% end %>
 </div>  
 
+
 <h1 class="panel-title"> Select CSV File</h1>
 
-
-
-  
 
 

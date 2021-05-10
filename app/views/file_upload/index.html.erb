@@ -1,7 +1,40 @@
-<%= form_with do |form| %>
-  <h1> hi i am show </h1>
-  <div>
-    <%= file_field_tag :csv_file, class:"btn btn-outline-danger" %>
-    <%= link_to "import", class:"btn btn-outline-primary"%>
-  </div>
-  <%end%>
+<div class="field form-label">
+  <%= form_for import_contacts_path, multipart: true do |form| %>
+    <div>
+      <table class="table">
+        <thead>
+          <tr>
+          <% $headers.each do |header| %>
+            <th scope="col"><%= header %></th>
+          <% end %>
+        </tr>
+          <tr>
+            <%$headers.each do |header, i| %>
+              
+              <th scope="col">
+               <%= form.select "col-#{i}", Contact.table_fields, { include_blank: false, selected: i }%>
+              
+              </th>
+            <% end %>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td><%=$name%></td>
+            <td><%=$birthday%></td>
+            <td><%=$phone%></td>
+            <td><%=$address%></td>
+            <td><%=$credit_card%></td>
+            <td><%=$franchise%></td>
+            <td><%=$email%></td>
+          </tr>
+          
+        </tbody>
+      </table>
+      <!--%= form.submit "import", class:"btn btn-outline-primary"%-->
+      <%= link_to 'import', import_contacts_path %>
+      <% puts Contact.table_fields%>
+    </div>
+    <br>
+  <% end %>
+</div>  

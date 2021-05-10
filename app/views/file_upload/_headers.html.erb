@@ -1,0 +1,45 @@
+<div class="field form-label">
+  <%= form_for :file do |form| %>
+    <div>
+      <table class="table">
+        <thead>
+        
+          <% if @original_headers %>
+            
+            <tr>
+              <% @original_headers.each do |header| %>
+                <th scope="col"><%= header %></th>
+              <% end %>
+            </tr>
+            <tr>
+              <%@original_headers.each do |header, i| %>
+                
+                <th scope="col">
+                  <%= form.select i, Contact.table_column_names, { include_blank: false, selected: i }%>
+                
+                </th>
+              <% end %>
+            </tr>
+          <% end %>
+        </thead>
+
+
+        <tbody>
+          <tr>
+            <td><%=$name%></td>
+            <td><%=$birthday%></td>
+            <td><%=$phone%></td>
+            <td><%=$address%></td>
+            <td><%=$credit_card%></td>
+            <td><%=$franchise%></td>
+            <td><%=$email%></td>
+          </tr>
+          
+        </tbody>
+      </table>
+      <!--%= form.submit "import", class:"btn btn-outline-primary"%-->
+      <%= link_to 'import', import_contacts_path, class:"btn btn-success" %>
+    </div>
+    <br>
+  <% end %>
+</div>  

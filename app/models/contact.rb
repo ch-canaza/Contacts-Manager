@@ -46,39 +46,55 @@ class Contact < ApplicationRecord
             length: { minimum: 3, maximum: 35 },
             format: { with: VALID_EMAIL_REGEX }
 
+
   has_one_attached :csv_file
 
-  
+  def self.table_column_names
+    %w[full_name date_of_birth phone_number address credit_card franchise email]
+  end
+
   def card_number
     @card_number ||= Password.new(card_number_hash) if card_number_hash.present?
   end
 
   def card_number=(new_card_number)
-   @card_number = new_card_number
+    @card_number = new_card_number
     self.card_number_hash = @card_number
   end
 
-  def self.import(file, user)
-    if user
+  # def self.import(file, user)
+  #   if user
 
-      $success = false
-      CSV.foreach(file, headers: true) do |row|
-        puts row.headers
-        puts row
-        $headers = row.headers
-        if user.contacts.create! row.to_hash
-          $success = true
-          puts 'saved'
-          $data_location = 'Contacts list'
-        else
-          puts 'data has duplicated'
-          $data_location = 'Fails list'
-          user.failcontacts.create! row.to_hash
-        end
-      end
-    end
+  #     $success = false
+  #     CSV.foreach(file, headers: true) do |row|
+  #       puts row.headers
+  #       puts row
+  #       $headers = row.headers
+  #       puts '----------***---------'
+  #       puts "uploading #{row}"
+  #       puts '----------***---------'
 
-  end
+  #       if user.contacts.create! row.to_hash
+  #         $success = true
+  #         puts '----------***---------'
+          
+  #         puts "#{row}saved"
+  #         puts '----------***---------'
+
+  #         $data_location = 'Contacts list'
+  #       else
+  #         puts '----------***---------'
+
+  #         puts "#{row}failed"
+  #         puts '----------***---------'
+  
+  #           $data_location = 'Fails list'
+  #         user.failcontacts.create! row.to_hash
+  #       end
+  #     end
+  #   end
+
+  # end
 
   def self.to_csv
     attributes = %w[full_name last_names email phone_number position salary department]
